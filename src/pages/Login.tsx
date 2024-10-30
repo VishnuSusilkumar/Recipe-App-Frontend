@@ -6,6 +6,7 @@ import axiosInstance from "../axios/axiosInstance";
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "../store/userSlice";
+import SubLoader from "../components/Loader/SubLoader";
 
 interface LoginFormValues {
   email: string;
@@ -14,6 +15,7 @@ interface LoginFormValues {
 
 const Login: React.FC = () => {
   const [loginError, setLoginError] = useState<string>("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -35,11 +37,17 @@ const Login: React.FC = () => {
         .email("Invalid email address")
         .required("Email is required"),
       password: Yup.string()
-        .min(6, "Password must be at least 6 characters")
+        .min(8, "Password must be at least 8 characters")
+        .matches(/[0-9]/, "Password must contain at least one number")
+        .matches(
+          /[!@#$%^&*(),.?":{}|<>]/,
+          "Password must contain at least one special character"
+        )
         .required("Password is required"),
     }),
     onSubmit: async (values: LoginFormValues) => {
       setLoginError("");
+      setLoading(true);
       try {
         const res = await axiosInstance.post("/auth/login", values);
 
@@ -66,16 +74,22 @@ const Login: React.FC = () => {
           error.response?.data?.message || "Login failed. Please try again.";
         setLoginError(errorMessage);
         toast.error(errorMessage);
+      } finally {
+        setLoading(false);
       }
     },
   });
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-indigo-400">
+    <div className="flex items-center justify-center min-h-screen bg-[#EDEDED]">
       <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full">
-        <h1 className="text-2xl font-bold text-center text-gray-700 mb-6">
-          LOGIN
+        <h1 className="text-3xl font-bold text-center text-gray-800 mb-4">
+          Recipe Application
         </h1>
+        <p className="text-center text-gray-600 mb-6">
+          "The secret ingredient is already within you—let’s get cooking!"
+        </p>
+
         <form onSubmit={formik.handleSubmit}>
           <div className="mb-4">
             <label
@@ -130,9 +144,10 @@ const Login: React.FC = () => {
           <div className="flex justify-center mt-4">
             <button
               type="submit"
-              className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 flex items-center justify-center"
+              disabled={loading}
             >
-              Log In
+              {loading ? <SubLoader /> : "Log In"}
             </button>
           </div>
 

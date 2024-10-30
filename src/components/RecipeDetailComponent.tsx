@@ -30,20 +30,20 @@ const RecipeDetailComponent: React.FC<RecipeDetailComponentProps> = ({
 
   return (
     <div className="flex flex-col h-full bg-gradient-to-r from-gray-50 to-gray-200 p-6 rounded-lg shadow-lg">
-      <h2 className="text-5xl font-bold text-gray-800 mb-4 text-center">
+      <h2 className="text-2xl md:text-3xl lg:text-5xl font-bold text-gray-800 mb-4 text-center">
         {recipeDetails.title}
       </h2>
       <img
         src={recipeDetails.image}
         alt={recipeDetails.title}
-        className="w-full h-64 object-cover rounded-md mb-6"
+        className="w-full h-48 md:h-64 object-cover rounded-md mb-6"
       />
       <p
-        className="text-gray-700 mb-6 text-lg"
+        className="text-gray-700 mb-6 text-base md:text-lg"
         dangerouslySetInnerHTML={{ __html: recipeDetails.summary }}
       ></p>
 
-      <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 rounded-md shadow-inner">
+      <div className="flex flex-col md:flex-row justify-between items-center mb-4 p-4 bg-gray-100 rounded-md shadow-inner">
         <span className="text-sm text-gray-500">
           Ready in: {recipeDetails.readyInMinutes} minutes
         </span>
@@ -52,23 +52,29 @@ const RecipeDetailComponent: React.FC<RecipeDetailComponentProps> = ({
         </span>
       </div>
 
-      <h3 className="text-3xl font-semibold mt-4 border-b-2 border-gray-400 pb-2">
+      <h3 className="text-2xl md:text-3xl font-semibold mt-4 border-b-2 border-gray-400 pb-2">
         Ingredients
       </h3>
       <ul className="list-disc list-inside mb-6 pl-5">
         {recipeDetails.ingredients.map((ingredient) => (
-          <li key={ingredient.id} className="text-gray-800 text-lg mb-1">
+          <li
+            key={ingredient.id}
+            className="text-gray-800 text-base md:text-lg mb-1"
+          >
             {ingredient.amount} {ingredient.unit} {ingredient.name}
           </li>
         ))}
       </ul>
 
-      <h3 className="text-3xl font-semibold mt-4 border-b-2 border-gray-400 pb-2">
+      <h3 className="text-2xl md:text-3xl font-semibold mt-4 border-b-2 border-gray-400 pb-2">
         Instructions
       </h3>
       <ol className="list-decimal list-inside mb-6 pl-5">
         {recipeDetails.instructions.map((step) => (
-          <li key={step.number} className="text-gray-800 text-lg mb-1">
+          <li
+            key={step.number}
+            className="text-gray-800 text-base md:text-lg mb-1"
+          >
             {step.instruction}
           </li>
         ))}

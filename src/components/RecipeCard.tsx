@@ -30,9 +30,14 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ id, title, image }) => {
   };
 
   return (
-    <div className="cursor-pointer relative" onClick={handleClick}>
+    <div
+      className="cursor-pointer bg-white shadow-md rounded-lg relative"
+      onClick={handleClick}
+    >
       <img src={image} alt={title} className="w-full h-40 object-cover" />
-      <h3 className="text-lg font-semibold mt-2">{title}</h3>
+      <div className="p-2">
+        <h3 className="text-lg font-semibold mt-2">{title}</h3>
+      </div>
 
       <button
         onClick={(e) => {

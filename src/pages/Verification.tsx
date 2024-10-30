@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { useSelector, useDispatch } from "react-redux";
 import OTPInput from "react-otp-input";
 import { clearUser } from "../store/userSlice";
+import SubLoader from "../components/Loader/SubLoader";
 
 interface VerificationFormValues {
   activationCode: string;
@@ -18,6 +19,7 @@ const Verification: React.FC = () => {
   const token = useSelector((state: any) => state.user.token);
 
   const [otp, setOtp] = useState<string>("");
+  const [loading, setLoading] = useState(false);
 
   const formik = useFormik<VerificationFormValues>({
     initialValues: {
@@ -29,6 +31,7 @@ const Verification: React.FC = () => {
         .length(4, "Activation code must be 4 digits"),
     }),
     onSubmit: async () => {
+      setLoading(true);
       try {
         const response = await axiosInstance.post("/auth/activate", {
           token,
@@ -48,16 +51,23 @@ const Verification: React.FC = () => {
           error.response?.data?.message ||
           "Activation failed. Please try again.";
         toast.error(errorMessage);
+      } finally {
+        setLoading(false);
       }
     },
   });
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-indigo-400 to-purple-500">
+    <div className="flex items-center justify-center min-h-screen bg-[#EDEDED]">
       <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full text-center">
-        <h1 className="text-2xl font-bold text-center text-gray-700 mb-6">
-          Verify Your Account
+        <h1 className="text-3xl font-bold text-center text-gray-800 mb-4">
+          Recipe Application
         </h1>
+        <p className="text-center text-gray-600 mb-6">
+          "We're almost ready to serve. Verify to unlock delicious
+          possibilities."
+        </p>
+
         <form onSubmit={formik.handleSubmit}>
           <div className="mb-6">
             <label
@@ -87,7 +97,7 @@ const Verification: React.FC = () => {
                 }}
                 renderInput={(props) => (
                   <input {...props} className="focus:border-indigo-500" />
-                )} // Adding focus class manually
+                )}
               />
             </div>
             {formik.touched.activationCode && formik.errors.activationCode && (
@@ -101,9 +111,9 @@ const Verification: React.FC = () => {
             <button
               type="submit"
               className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              disabled={otp.length < 4}
+              disabled={otp.length < 4 || loading}
             >
-              Verify Account
+              {loading ? <SubLoader /> : "Verify Account"}
             </button>
           </div>
         </form>

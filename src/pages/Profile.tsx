@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/Header/Header";
 import Sidebar from "../components/Sidebar/Sidebar";
 import ProfileComponent from "../components/ProfileComponent";
-import RecipeCard from "../components/RecipeCard";
+import SearchResults from "../components/SearchResults"; // Import SearchResults
 import Loader from "../components/Loader/Loader";
 import axiosInstance from "../axios/axiosInstance";
 
@@ -33,7 +33,6 @@ const Profile: React.FC = () => {
       const response = await axiosInstance.get("auth/profile");
       if (response.data.success) {
         setUserProfile(response.data.user);
-        
       } else {
         toast.error("Failed to fetch user profile.");
       }
@@ -60,16 +59,7 @@ const Profile: React.FC = () => {
               <Loader />
             </div>
           ) : searchResults.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {searchResults.map((recipe) => (
-                <RecipeCard
-                  key={recipe.id}
-                  id={recipe.id}
-                  title={recipe.title}
-                  image={recipe.image}
-                />
-              ))}
-            </div>
+            <SearchResults results={searchResults} /> // Use SearchResults here
           ) : userProfile ? (
             <ProfileComponent
               name={userProfile.name}

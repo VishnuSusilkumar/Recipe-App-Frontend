@@ -42,7 +42,6 @@ const Home: React.FC = () => {
       <div className="flex-1 ml-16 sm:ml-20 md:ml-24 lg:ml-28">
         <Header onSearch={handleSearchResults} />
         <main className="p-8 bg-[#EDEDED]">
-          <h2 className="text-lg mb-4">Welcome to the Recipe App!</h2>
           {searchResults.length > 0 ? (
             <SearchResults results={searchResults} />
           ) : (

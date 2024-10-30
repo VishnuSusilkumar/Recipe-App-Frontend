@@ -45,7 +45,7 @@ const SavedRecipeCard: React.FC<RecipeCardProps> = ({
       onClick={handleClick}
     >
       <img src={image} alt={title} className="w-full h-48 object-cover" />
-      <div className="p-4">
+      <div className="p-2">
         <h2 className="text-lg font-semibold">{title}</h2>
       </div>
       <button
@@ -58,7 +58,6 @@ const SavedRecipeCard: React.FC<RecipeCardProps> = ({
         <FiTrash2 size={20} />
       </button>
 
-      {/* Confirmation modal */}
       {showModal && (
         <ConfirmationModal
           title="Delete Recipe"

@@ -1,27 +1,35 @@
 import { useFormik } from "formik";
-import React from "react";
+import React, { useState } from "react";
 import * as Yup from "yup";
 import { toast } from "sonner";
 import axiosInstance from "../axios/axiosInstance";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUser } from "../store/userSlice";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import SubLoader from "../components/Loader/SubLoader";
 
 interface SignupFormValues {
   name: string;
   email: string;
   password: string;
+  confirmPassword: string;
 }
 
 const Signup: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const formik = useFormik<SignupFormValues>({
     initialValues: {
       name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
     validationSchema: Yup.object({
       name: Yup.string()
@@ -31,10 +39,19 @@ const Signup: React.FC = () => {
         .email("Invalid email address")
         .required("Email is required"),
       password: Yup.string()
-        .min(6, "Password must be at least 6 characters")
+        .min(8, "Password must be at least 8 characters")
+        .matches(/[0-9]/, "Password must contain at least one number")
+        .matches(
+          /[!@#$%^&*(),.?":{}|<>]/,
+          "Password must contain at least one special character"
+        )
         .required("Password is required"),
+      confirmPassword: Yup.string()
+        .oneOf([Yup.ref("password")], "Passwords must match")
+        .required("Confirm password is required"),
     }),
     onSubmit: async (values: SignupFormValues) => {
+      setLoading(true);
       try {
         const res = await axiosInstance.post("/auth/register", {
           name: values.name,
@@ -60,16 +77,22 @@ const Signup: React.FC = () => {
         const errorMessage =
           error.response?.data?.message || "Signup failed. Please try again.";
         toast.error(errorMessage);
+      } finally {
+        setLoading(false);
       }
     },
   });
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-indigo-400 p-4">
+    <div className="flex items-center justify-center min-h-screen bg-[#EDEDED] p-4">
       <div className="bg-white shadow-lg rounded-lg p-6 max-w-md w-full">
-        <h1 className="text-2xl font-bold text-center text-gray-700 mb-6">
-          SIGN UP
+        <h1 className="text-3xl font-bold text-center text-gray-800 mb-4">
+          Recipe Application
         </h1>
+        <p className="text-center text-gray-600 mb-6">
+          "Every great recipe begins with a single step. Welcome to your
+          culinary journey!"
+        </p>
         <form onSubmit={formik.handleSubmit}>
           <div className="mb-4">
             <label
@@ -115,7 +138,7 @@ const Signup: React.FC = () => {
             )}
           </div>
 
-          <div className="mb-4">
+          <div className="mb-4 relative">
             <label
               htmlFor="password"
               className="block text-sm font-medium text-gray-700"
@@ -123,7 +146,7 @@ const Signup: React.FC = () => {
               Password
             </label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               id="password"
               className={`mt-1 block w-full px-3 py-2 border ${
                 formik.errors.password && formik.touched.password
@@ -132,6 +155,13 @@ const Signup: React.FC = () => {
               } rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
               {...formik.getFieldProps("password")}
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute right-3 top-9 focus:outline-none"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
             {formik.touched.password && formik.errors.password && (
               <p className="text-red-500 text-sm mt-1">
                 {formik.errors.password}
@@ -139,11 +169,44 @@ const Signup: React.FC = () => {
             )}
           </div>
 
+          <div className="mb-4 relative">
+            <label
+              htmlFor="confirmPassword"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Confirm Password
+            </label>
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              id="confirmPassword"
+              className={`mt-1 block w-full px-3 py-2 border ${
+                formik.errors.confirmPassword && formik.touched.confirmPassword
+                  ? "border-red-500"
+                  : "border-gray-300"
+              } rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
+              {...formik.getFieldProps("confirmPassword")}
+            />
+            <button
+              type="button"
+              onClick={() => setShowConfirmPassword((prev) => !prev)}
+              className="absolute right-3 top-9 focus:outline-none"
+            >
+              {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
+            {formik.touched.confirmPassword &&
+              formik.errors.confirmPassword && (
+                <p className="text-red-500 text-sm mt-1">
+                  {formik.errors.confirmPassword}
+                </p>
+              )}
+          </div>
+
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full bg-indigo-600 text-white py-2 px-4 rounded hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 flex items-center justify-center"
+            disabled={loading}
           >
-            Sign Up
+            {loading ? <SubLoader /> : "Sign Up"}
           </button>
 
           <p className="text-center mt-4 text-sm text-gray-500">

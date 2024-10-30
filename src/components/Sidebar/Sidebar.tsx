@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { FaHome, FaUser, FaBook } from "react-icons/fa";
+import { FiUser } from "react-icons/fi";
+import { MdOutlineSaveAlt } from "react-icons/md";
+import { AiOutlineWindows } from "react-icons/ai";
 
 const Sidebar: React.FC = () => {
   return (
@@ -12,7 +14,7 @@ const Sidebar: React.FC = () => {
             to="/home"
             className="flex items-center text-lg text-gray-500 hover:text-gray-600"
           >
-            <FaHome className="text-xl sm:text-2xl md:text-3xl" />
+            <AiOutlineWindows className="text-xl sm:text-2xl md:text-3xl" />
           </Link>
         </li>
         <li>
@@ -20,7 +22,7 @@ const Sidebar: React.FC = () => {
             to="/profile"
             className="flex items-center text-lg text-gray-500 hover:text-gray-600"
           >
-            <FaUser className="text-xl sm:text-2xl md:text-3xl" />
+            <FiUser className="text-xl sm:text-2xl md:text-3xl" />
           </Link>
         </li>
         <li>
@@ -28,7 +30,7 @@ const Sidebar: React.FC = () => {
             to="/saved-recipes"
             className="flex items-center text-lg text-gray-500 hover:text-gray-600"
           >
-            <FaBook className="text-xl sm:text-2xl md:text-3xl" />
+            <MdOutlineSaveAlt className="text-xl sm:text-2xl md:text-3xl" />
           </Link>
         </li>
       </ul>
