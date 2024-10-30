@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../store/userSlice";
 
 interface SignupFormValues {
-  name: string; // Changed to a single name field
+  name: string;
   email: string;
   password: string;
 }
@@ -19,14 +19,14 @@ const Signup: React.FC = () => {
 
   const formik = useFormik<SignupFormValues>({
     initialValues: {
-      name: "", // Initialize name
+      name: "",
       email: "",
       password: "",
     },
     validationSchema: Yup.object({
       name: Yup.string()
         .max(100, "Must be 100 characters or less")
-        .required("Name is required"), // Updated validation
+        .required("Name is required"),
       email: Yup.string()
         .email("Invalid email address")
         .required("Email is required"),
@@ -37,14 +37,14 @@ const Signup: React.FC = () => {
     onSubmit: async (values: SignupFormValues) => {
       try {
         const res = await axiosInstance.post("/auth/register", {
-          name: values.name, // Change to a single name field
+          name: values.name,
           email: values.email,
           password: values.password,
         });
         if (res.status === 201) {
           dispatch(
             setUser({
-              name: values.name, // Update to use the name field
+              name: values.name,
               email: values.email,
               token: res.data.token,
             })
@@ -71,7 +71,6 @@ const Signup: React.FC = () => {
           SIGN UP
         </h1>
         <form onSubmit={formik.handleSubmit}>
-          {/* Name Input */}
           <div className="mb-4">
             <label
               htmlFor="name"
@@ -87,14 +86,13 @@ const Signup: React.FC = () => {
                   ? "border-red-500"
                   : "border-gray-300"
               } rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm`}
-              {...formik.getFieldProps("name")} // Use the name field
+              {...formik.getFieldProps("name")}
             />
             {formik.touched.name && formik.errors.name && (
               <p className="text-red-500 text-sm mt-1">{formik.errors.name}</p>
             )}
           </div>
 
-          {/* Email Input */}
           <div className="mb-4">
             <label
               htmlFor="email"
@@ -117,7 +115,6 @@ const Signup: React.FC = () => {
             )}
           </div>
 
-          {/* Password Input */}
           <div className="mb-4">
             <label
               htmlFor="password"

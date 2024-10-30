@@ -3,13 +3,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 interface UserState {
   name: string;
   email: string;
-  token: string | null;
+  token: string;
 }
 
 const initialState: UserState = {
   name: "",
   email: "",
-  token: null,
+  token: "",
 };
 
 const userSlice = createSlice({
@@ -25,7 +25,7 @@ const userSlice = createSlice({
     clearUser: (state) => {
       state.name = "";
       state.email = "";
-      state.token = null;
+      state.token = "";
     },
   },
 });

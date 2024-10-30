@@ -1,4 +1,3 @@
-// src/pages/Login.tsx
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -45,13 +44,12 @@ const Login: React.FC = () => {
         const res = await axiosInstance.post("/auth/login", values);
 
         if (res.status === 200) {
-          const user = res.data;
-
+          const user = res.data.user;
           dispatch(
             setUser({
-              name: user.name, // Updated to use the single name field
+              name: user.name,
               email: user.email,
-              token: null,
+              token: "",
             })
           );
 

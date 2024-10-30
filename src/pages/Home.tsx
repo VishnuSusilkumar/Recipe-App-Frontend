@@ -1,34 +1,54 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { clearUser } from "../store/userSlice";
+import React, { useEffect, useState } from "react";
+import Header from "../components/Header/Header";
+import Sidebar from "../components/Sidebar/Sidebar";
 import { toast } from "sonner";
+import axiosInstance from "../axios/axiosInstance";
+import SearchResults from "../components/SearchResults";
+import RecipeGrid from "../components/RecipeGrid";
+import Loader from "../components/Loader/Loader";
 
 const Home: React.FC = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const [recipes, setRecipes] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  const { firstName, email } = useSelector((state: any) => state.user);
-
-  const handleLogout = () => {
-    dispatch(clearUser());
-    toast.success("Logged out successfully!");
-    navigate("/login", { replace: true });
+  const fetchRecipes = async () => {
+    try {
+      const response = await axiosInstance.get("/recipes/all");
+      setRecipes(response.data.data);
+    } catch (error) {
+      console.error("Error fetching recipes:", error);
+      toast.error("Failed to fetch recipes. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
+  const handleSearchResults = (results: any[]) => {
+    setSearchResults(results);
+  };
+
+  useEffect(() => {
+    fetchRecipes();
+  }, []);
+
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white shadow-lg rounded-lg p-8 max-w-md w-full text-center">
-        <h1 className="text-2xl font-bold text-gray-700 mb-4">
-          Welcome, {firstName}!
-        </h1>
-        <p className="text-gray-600 mb-8">You are logged in as {email}.</p>
-        <button
-          onClick={handleLogout}
-          className="bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
-        >
-          Log Out
-        </button>
+    <div className="flex">
+      <Sidebar />
+      <div className="flex-1 ml-16 sm:ml-20 md:ml-24 lg:ml-28">
+        <Header onSearch={handleSearchResults} />
+        <main className="p-8 bg-[#EDEDED]">
+          <h2 className="text-lg mb-4">Welcome to the Recipe App!</h2>
+          {searchResults.length > 0 ? (
+            <SearchResults results={searchResults} />
+          ) : (
+            <RecipeGrid recipes={recipes} />
+          )}
+        </main>
       </div>
     </div>
   );
