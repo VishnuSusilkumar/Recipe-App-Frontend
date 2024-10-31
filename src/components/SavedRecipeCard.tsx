@@ -41,7 +41,7 @@ const SavedRecipeCard: React.FC<RecipeCardProps> = ({
 
   return (
     <div
-      className="relative bg-white shadow-md rounded-lg overflow-hidden cursor-pointer"
+      className="relative bg-white shadow-md rounded-lg overflow-hidden cursor-pointer transition-transform transform hover:scale-105"
       onClick={handleClick}
     >
       <img src={image} alt={title} className="w-full h-48 object-cover" />

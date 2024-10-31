@@ -31,7 +31,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({ id, title, image }) => {
 
   return (
     <div
-      className="cursor-pointer bg-white shadow-md rounded-lg relative"
+      className="cursor-pointer bg-white shadow-md rounded-lg relative transition-transform transform hover:scale-105"
       onClick={handleClick}
     >
       <img src={image} alt={title} className="w-full h-40 object-cover" />
