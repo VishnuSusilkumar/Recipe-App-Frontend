@@ -9,6 +9,7 @@ import Loader from "../components/Loader/Loader";
 import Pagination from "@mui/material/Pagination";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
+import ConfirmationModal from "../components/ConfirmModel/ConfirmationModal";
 
 interface Recipe {
   _id: string;
@@ -37,6 +38,9 @@ const SavedRecipes: React.FC = () => {
   const [filter, setFilter] = useState<string>("all");
   const recipesPerPage = 8;
 
+  const [showModal, setShowModal] = useState(false);
+  const [recipeToDelete, setRecipeToDelete] = useState<string | null>(null);
+
   useEffect(() => {
     const fetchSavedRecipes = async () => {
       try {
@@ -63,10 +67,25 @@ const SavedRecipes: React.FC = () => {
     setPage(1);
   };
 
-  const handleDelete = (id: string) => {
-    setSavedRecipes((prevRecipes) =>
-      prevRecipes.filter((recipe) => recipe._id !== id)
-    );
+  const handleDelete = async (id: string) => {
+    try {
+      await axiosInstance.delete(`/recipes/delete/${id}`);
+      toast.success("Recipe removed successfully!");
+      setSavedRecipes((prevRecipes) =>
+        prevRecipes.filter((recipe) => recipe._id !== id)
+      );
+    } catch (error: any) {
+      console.error("Failed to delete recipe:", error);
+      toast.error("Failed to delete recipe. Please try again.");
+    } finally {
+      setShowModal(false);
+      setRecipeToDelete(null);
+    }
+  };
+
+  const confirmDelete = (id: string) => {
+    setRecipeToDelete(id);
+    setShowModal(true);
   };
 
   const handleFilterChange = (event: SelectChangeEvent<string>) => {
@@ -142,7 +161,7 @@ const SavedRecipes: React.FC = () => {
                         id={recipe._id}
                         title={recipe.title}
                         image={recipe.image}
-                        onDelete={handleDelete}
+                        onDelete={confirmDelete}
                       />
                     ))}
                   </div>
@@ -158,6 +177,18 @@ const SavedRecipes: React.FC = () => {
             </>
           )}
         </main>
+
+        {showModal && recipeToDelete && (
+          <ConfirmationModal
+            title="Delete Recipe"
+            message="Are you sure you want to delete this recipe?"
+            onConfirm={() => handleDelete(recipeToDelete!)}
+            onCancel={() => {
+              setShowModal(false);
+              setRecipeToDelete(null);
+            }}
+          />
+        )}
       </div>
     </div>
   );

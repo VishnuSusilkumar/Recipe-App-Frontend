@@ -1,15 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 import { FiTrash2 } from "react-icons/fi";
-import axiosInstance from "../axios/axiosInstance";
-import ConfirmationModal from "./ConfirmModel/ConfirmationModal";
 
 interface RecipeCardProps {
   id: string;
   title: string;
   image: string;
-  onDelete: (id: string) => void;
+  onDelete: (id: string) => void; // Keep this for deletion confirmation
 }
 
 const SavedRecipeCard: React.FC<RecipeCardProps> = ({
@@ -19,24 +16,9 @@ const SavedRecipeCard: React.FC<RecipeCardProps> = ({
   onDelete,
 }) => {
   const navigate = useNavigate();
-  const [showModal, setShowModal] = useState(false);
-
-  const handleDelete = async () => {
-    try {
-      await axiosInstance.delete(`/recipes/delete/${id}`);
-      toast.success("Recipe removed successfully!");
-      onDelete(id);
-      setShowModal(false);
-    } catch (error: any) {
-      console.error("Failed to delete recipe:", error);
-      toast.error("Failed to delete recipe. Please try again.");
-    }
-  };
 
   const handleClick = () => {
-    if (!showModal) {
-      navigate(`/recipes/saved-recipes/${id}`);
-    }
+    navigate(`/recipes/saved-recipes/${id}`);
   };
 
   return (
@@ -51,23 +33,12 @@ const SavedRecipeCard: React.FC<RecipeCardProps> = ({
       <button
         onClick={(e) => {
           e.stopPropagation();
-          setShowModal(true);
+          onDelete(id);
         }}
         className="absolute top-2 right-2 text-red-600 bg-white rounded-full p-1 shadow-md hover:bg-gray-100 focus:outline-none"
       >
         <FiTrash2 size={20} />
       </button>
-
-      {showModal && (
-        <ConfirmationModal
-          title="Delete Recipe"
-          message="Are you sure you want to delete this recipe?"
-          onConfirm={handleDelete}
-          onCancel={() => {
-            setShowModal(false);
-          }}
-        />
-      )}
     </div>
   );
 };
