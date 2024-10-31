@@ -18,7 +18,7 @@ const Sidebar: React.FC = () => {
 
   return (
     <aside className="fixed top-0 left-0 w-16 sm:w-20 md:w-24 lg:w-28 h-screen bg-white p-6 flex flex-col items-center">
-      <button onClick={() => handleNavigation("/home")}>
+      <button onClick={() => handleNavigation("/")}>
         <img
           src="https://avatars.githubusercontent.com/u/19819005?v=4"
           alt="Logo"
@@ -28,7 +28,7 @@ const Sidebar: React.FC = () => {
       <ul className="mt-9 space-y-10 md:space-y-12 lg:space-y-14">
         <li>
           <button
-            onClick={() => handleNavigation("/home")}
+            onClick={() => handleNavigation("/")}
             className="flex items-center text-lg text-gray-500 hover:text-gray-600"
           >
             <AiOutlineWindows className="text-xl sm:text-2xl md:text-3xl" />

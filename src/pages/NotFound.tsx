@@ -10,7 +10,7 @@ const NotFound: React.FC = () => {
       <p className="text-gray-600 mb-6">
         The page you're looking for doesn't exist or has been moved.
       </p>
-      <Link to="/home" className="text-purple-500 hover:text-purple-700">
+      <Link to="/" className="text-purple-500 hover:text-purple-700">
         Go back to Home
       </Link>
     </div>

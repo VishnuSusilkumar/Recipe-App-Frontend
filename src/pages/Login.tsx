@@ -23,7 +23,7 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     if (email) {
-      navigate("/home", { replace: true });
+      navigate("/", { replace: true });
     }
   }, [email, navigate]);
 
@@ -62,7 +62,7 @@ const Login: React.FC = () => {
           );
 
           toast.success("Login successful!");
-          navigate("/home", { replace: true });
+          navigate("/", { replace: true });
         } else {
           setLoginError(
             "Unexpected response from the server. Please try again."
