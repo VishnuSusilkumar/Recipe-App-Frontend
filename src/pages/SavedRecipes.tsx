@@ -106,7 +106,7 @@ const SavedRecipes: React.FC = () => {
       <Sidebar />
       <div className="flex-1 ml-16 sm:ml-20 md:ml-24 lg:ml-28">
         <Header onSearch={handleSearchResults} />
-        <main className="p-8 bg-[#EDEDED] h-screen">
+        <main className="p-8 bg-[#EDEDED]">
           {searchResults.length > 0 ? (
             <SearchResults results={searchResults} />
           ) : (
@@ -118,7 +118,7 @@ const SavedRecipes: React.FC = () => {
                 <Select
                   value={filter}
                   onChange={handleFilterChange}
-                  className="bg-white border border-gray-300"
+                  className="bg-white border shadow-md rounded-lg border-gray-300"
                 >
                   <MenuItem value="all">All</MenuItem>
                   <MenuItem value="veg">Vegetarian</MenuItem>

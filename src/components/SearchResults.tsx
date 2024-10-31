@@ -57,7 +57,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ results }) => {
         <Select
           value={filter}
           onChange={handleFilterChange}
-          className="bg-white border border-gray-300"
+          className="bg-white border shadow-md rounded-lg border-gray-300"
         >
           <MenuItem value="all">All</MenuItem>
           <MenuItem value="veg">Vegetarian</MenuItem>

@@ -20,15 +20,14 @@ const Header: React.FC<HeaderProps> = ({ onSearch }) => {
       });
       console.log("Search results:", response.data.recipes);
       onSearch(response.data.recipes);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error searching recipes:", error);
-      toast.error("Failed to search recipes. Please try again.");
+      toast.error(error.response.data.message);
     }
   };
 
   return (
     <header className="flex flex-col md:flex-row items-start md:items-center justify-between p-4 bg-white">
-      {/* Left section: Welcome message and quote */}
       <div className="flex flex-col mb-2 md:mb-0 text-left">
         <h2
           className="text-lg md:text-2xl text-gray-800 cursor-pointer"

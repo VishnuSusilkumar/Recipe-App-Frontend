@@ -9,6 +9,7 @@ import RecipeDetails from "./pages/RecipeDetails";
 import SavedRecipes from "./pages/SavedRecipes";
 import SavedRecipeDetailsPage from "./pages/SavedRecipeDetails";
 import PrivateRoute from "./utils/PrivateRoute";
+import NotFound from "./pages/NotFound";
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
             element={<SavedRecipeDetailsPage />}
           />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );
